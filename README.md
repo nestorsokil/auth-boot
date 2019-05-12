@@ -1,0 +1,1 @@
+Just a small attempt to create customized auth service with Spring Boot
