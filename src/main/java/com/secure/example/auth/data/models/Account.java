@@ -1,41 +1,19 @@
 package com.secure.example.auth.data.models;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Document
-public class Account extends Entity {
+@javax.persistence.Entity
+public class Account {
+  @Id @GeneratedValue private Long id;
+  private LocalDateTime createdTime;
+  private LocalDateTime deletedTime;
   private String login;
   private String password;
   private String salt;
-  private List<RefreshToken> refreshTokens;
-
-  public Optional<RefreshToken> findToken(String tokenValue) {
-    return getRefreshTokens().stream()
-        .filter(token -> token.getToken().equals(tokenValue))
-        .findFirst();
-  }
-
-  private void removeExpiredTokens() {
-    setRefreshTokens(
-        getRefreshTokens().stream()
-            .filter(token -> !token.isExpired())
-            .collect(Collectors.toList()));
-  }
-
-  public void refresh(RefreshToken refreshToken) {
-    if (getRefreshTokens() != null) {
-      removeExpiredTokens();
-      getRefreshTokens().add(refreshToken);
-    } else {
-      setRefreshTokens(List.of(refreshToken));
-    }
-  }
+  private String role;
 }
